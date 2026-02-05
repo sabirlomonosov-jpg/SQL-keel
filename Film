@@ -1,0 +1,32 @@
+CREATE DATABASE filmLomonosov;
+use filmLomonosov;
+
+CREATE TABLE rezisoor(
+rezisoorID int PRIMARY KEY identity(1,1),
+eesnimi varchar(20),
+perenimi varchar(20) UNIQUE,
+synniaasta int);
+
+Select * from rezisoor;
+
+INSERT INTO rezisoor(eesnimi, perenimi, synniaasta)
+VALUES ('James', 'Comeron', 1987),
+('David', 'Shore', 1968),
+('Killer','Queen', 1977),
+('Mr.', 'P', 1999)
+
+drop table rezisoor
+
+CREATE TABLE film(
+FilmNimetus varchar(50),
+pikkus int,
+rezisoorID int,
+FOREIGN KEY (rezisoorID) REFERENCES rezisoor(rezisoorID),
+v_aasta int CHECK(v_aasta < 2027)
+);
+
+Select * from rezisoor
+Select * from film
+
+INSERT INTO film(FilmNimetus, pikkus, rezisoorID, v_aasta)
+Values('BrBrPatapim', 100, 4, 1999)
