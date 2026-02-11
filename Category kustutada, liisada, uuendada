@@ -1,0 +1,30 @@
+--tabeli kustutada
+CREATE PROCEDURE categorydelete
+@id int
+as
+BEGIN
+select * from categories
+delete from categories WHERE category_id=@id
+SELECT * FROM categories
+END;
+
+--tabeli liisada
+CREATE PROCEDURE newCategory
+@category_nimi varchar(30)
+as
+BEGIN
+INSERT INTO categories(category_name) VALUES (@category_nimi);
+select * from brands
+END;
+
+--tabeli uuendada
+CREATE PROCEDURE updateCategory
+@newCategory varchar(30),
+@id int
+as
+BEGIN
+SELECT * FROM categories
+UPDATE categories SET category_name=@newCategory
+WHERE category_id=@id
+select * from categories
+END;
