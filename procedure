@@ -1,0 +1,27 @@
+CREATE procedure muudaTabeli 
+@tegevus varchar(15),
+@tabeliNimi varchar(15),
+@veruNimi varchar(15),
+@andmetyyb varchar(15) =null
+AS
+BEGIN
+	DECLARE @SQLtegevus AS varchar(max)
+	SET @SQLtegevus = case
+		when @tegevus= 'add' then
+		concat('ALTER TABLE ', @tabeliNimi, ' ADD ', @veruNimi,' ', @andmetyyb)
+
+		when @tegevus= 'drop' then
+		concat('ALTER TABLE ', @tabeliNimi, ' DROP COLUMN ', @veruNimi)
+		END;
+
+print @SQLtegevus;
+begin
+EXEC(@SQLtegevus);
+END;
+END;
+
+EXEC muudaTabeli @tegevus = 'add', @tabeliNimi = 'kasutaja', @veruNimi = 'test', @andmetyyb = 'int'
+select * from kasutaja
+
+EXEC muudaTabeli @tegevus = 'drop', @tabeliNimi = 'kasutaja', @veruNimi = 'test' 
+select * from kasutaja
