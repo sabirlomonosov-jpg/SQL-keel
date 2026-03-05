@@ -1,0 +1,115 @@
+CREATE DATABASE Lomonosov
+use Lomonosov
+
+create table telefon(
+telefonID INT PRIMARY KEY,
+tootja VARCHAR(50) not null,
+telefonMudel VARCHAR(50),
+hind money,
+v_aasta int,
+oSystem VARCHAR(10)
+);
+
+select * from telefon
+
+ALTER TABLE telefon ALTER COLUMN oSystem varchar(30);
+
+insert into telefon (telefonID, tootja, telefonMudel, hind, v_aasta, oSystem) values (1, 'Celkon', 'Celkon C509', 39.99, 2010, 'Feature phone');
+insert into telefon (telefonID, tootja, telefonMudel, hind, v_aasta, oSystem) values (2, 'Toshiba', 'Toshiba TG02', 4.49, 2010, 'Microsoft Windows Mobile 6.5 Professional');
+insert into telefon (telefonID, tootja, telefonMudel, hind, v_aasta, oSystem) values (3, 'alcatel', 'alcatel One Touch Idol Ultra', 34.99, 2013, 'Android 4.1');
+insert into telefon (telefonID, tootja, telefonMudel, hind, v_aasta, oSystem) values (4, 'Telit', 'Telit G40', 3.99, 2003, 'Feature phone');
+insert into telefon (telefonID, tootja, telefonMudel, hind, v_aasta, oSystem) values (5, 'ZTE', 'ZTE Blade Q Mini', 2.49, 2014, 'Android 4.2');
+insert into telefon (telefonID, tootja, telefonMudel, hind, v_aasta, oSystem) values (6, 'Asus', 'Asus Memo', 3.49, 2012, 'Android 4.0.1');
+insert into telefon (telefonID, tootja, telefonMudel, hind, v_aasta, oSystem) values (7, 'O2', 'O2 XDA Stellar', 15.99, 0, 'Microsoft Windows Mobile 6.0 Professional');
+insert into telefon (telefonID, tootja, telefonMudel, hind, v_aasta, oSystem) values (8, 'Yezz', 'Yezz Classic CC10', 12.99, 2012, 'Feature phone');
+insert into telefon (telefonID, tootja, telefonMudel, hind, v_aasta, oSystem) values (9, 'verykool', 'verykool s5528 Cosmo', 3.59, 2017, 'Android 7.0');
+insert into telefon (telefonID, tootja, telefonMudel, hind, v_aasta, oSystem) values (10, 'HTC', 'HTC Gratia', 24.99, 2010, 'Android 2.2, Sense UI');
+insert into telefon (telefonID, tootja, telefonMudel, hind, v_aasta, oSystem) values (11, 'Nokia', 'Nokia 6650', 3.49, 2003, 'Feature phone');
+insert into telefon (telefonID, tootja, telefonMudel, hind, v_aasta, oSystem) values (12, 'ZTE', 'ZTE Blade A410', 3.49, 2015, 'Android 5.1');
+insert into telefon (telefonID, tootja, telefonMudel, hind, v_aasta, oSystem) values (13, 'Cat', 'Cat S42', 2.99, 2020, 'Android 10, planned upgrade to Android 11');
+insert into telefon (telefonID, tootja, telefonMudel, hind, v_aasta, oSystem) values (14, 'Lenovo', 'Lenovo Phab2', 34.99, 2016, 'Android 6.0');
+insert into telefon (telefonID, tootja, telefonMudel, hind, v_aasta, oSystem) values (15, 'Gigabyte', 'Gigabyte GSmart M3447', 4.99, 2011, 'Feature phone');
+insert into telefon (telefonID, tootja, telefonMudel, hind, v_aasta, oSystem) values (16, 'QMobile', 'QMobile T50 Bolt', 5.49, 2015, 'Android 4.4.2');
+insert into telefon (telefonID, tootja, telefonMudel, hind, v_aasta, oSystem) values (17, 'Nokia', 'Nokia Lumia 735', 14.99, 2014, 'Microsoft Windows Phone 8.1');
+insert into telefon (telefonID, tootja, telefonMudel, hind, v_aasta, oSystem) values (18, 'Philips', 'Philips W6610', 22.99, 2014, 'Android 4.2');
+insert into telefon (telefonID, tootja, telefonMudel, hind, v_aasta, oSystem) values (19, 'Oppo', 'Oppo Reno5 5G', 12.99, 2021, 'Android 11, ColorOS 11.1');
+insert into telefon (telefonID, tootja, telefonMudel, hind, v_aasta, oSystem) values (20, 'Huawei', 'Huawei G7206', 49.99, 2011, 'Feature phone');
+insert into telefon (telefonID, tootja, telefonMudel, hind, v_aasta, oSystem) values (21, 'Samsung', 'Samsung Galaxy J5 Prime', 4.99, 2016, 'Android 6.0.1, up to Android 8.0');
+insert into telefon (telefonID, tootja, telefonMudel, hind, v_aasta, oSystem) values (22, 'Huawei', 'Huawei Mate 10 Porsche Design', 3.29, 2017, 'Android 8.0, EMUI 9.1');
+insert into telefon (telefonID, tootja, telefonMudel, hind, v_aasta, oSystem) values (23, 'Bird', 'Bird S296', 4.5, 2007, 'Feature phone');
+insert into telefon (telefonID, tootja, telefonMudel, hind, v_aasta, oSystem) values (24, 'NEC', 'NEC N600', 2.99, 2003, 'Feature phone');
+insert into telefon (telefonID, tootja, telefonMudel, hind, v_aasta, oSystem) values (25, 'Honor', 'Honor 7i', 3.99, 2015, 'Android 5.1.1, up to 6.0, EMUI 3.1');
+
+--select kuvab ainult 2 vergu tabelist
+SELECT tootja, telefonMudel AS mudel FROM telefon
+
+--sorteerimine
+--ASC kasvavas jarjekorras
+SELECT tootja, telefonMudel AS mudel, hind
+FROM telefon
+ORDER BY hind
+--DESC kahanevas jarjekorras
+SELECT tootja, telefonMudel AS mudel, hind
+FROM telefon
+ORDER BY hind DESC
+
+--võrdlemine >, <, =, >=, <=
+SELECT telefonMudel, hind
+FROM telefon
+WHERE hind > 25 --leiab mudelid hinnaga suurem kui 25
+ORDER BY hind
+
+--leia mudelid vahemikus 10-15 euro
+SELECT telefonMudel, hind
+FROM telefon
+WHERE hind BETWEEN 10 and 15
+ORDER BY hind
+--sama paring ilma BETWEEN
+SELECT telefonMudel, hind
+FROM telefon
+WHERE 10 <= hind and hind < 15
+ORDER BY hind
+
+--distinct !? naitab ainult 1 kordus
+SELECT DISTINCT oSystem FROM telefon
+
+--vordlamine tekstiga LIKE
+SELECT tootja, telefonMudel
+FROM telefon
+WHERE tootja LIKE 'Lenovo'
+
+--IN kuvab vastavus looetelus
+SELECT tootja, telefonMudel
+FROM telefon
+WHERE tootja IN ('Lenovo','Samsung','ZTE')
+
+--saama paring ilma IN
+SELECT tootja, telefonMudel
+FROM telefon
+WHERE tootja LIKE 'Lenovo' OR tootja LIKE 'Samsung' OR tootja LIKE 'ZTE'
+
+--leia mudeli mis algavad S tahega
+SELECT tootja, telefonMudel
+FROM telefon
+WHERE telefonMudel LIKE 'S%'
+
+--sisaldab >ś taht '%S%'
+
+--argegaat funktsioonid: AVG, MAX, MIN, SUM, COUNT
+--keskmine valjastamise aasta
+SELECT AVG(v_aasta) AS keskmine_aasta
+FROM telefon
+
+--telefonide ulkogus
+SELECT Count(*) AS uldkogus
+FROM telefon
+
+--keeruline variant
+SELECT tootja, Count(*) AS uldkogus
+FROM telefon
+GROUP BY tootja
+
+--top 6
+SELECT top 6 tootja, hind
+FROM telefon
+ORDER BY tootja DESC
