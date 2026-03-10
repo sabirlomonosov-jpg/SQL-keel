@@ -1,0 +1,49 @@
+CREATE DATABASE Lomonosov;
+use Lomonosov;
+
+
+CREATE TABLE tootajad (
+    ID INT PRIMARY KEY,
+    Eesnimi VARCHAR(50),
+    Perekonnanimi VARCHAR(50)
+);
+
+
+CREATE TABLE TootajadKapid (
+KapiNumber INT PRIMARY KEY,
+ID INT,
+FOREIGN KEY (ID) REFERENCES tootjad(ID)
+);
+
+
+CREATE TABLE Kasutajad (
+KasutajaID INT PRIMARY KEY,
+Epost VARCHAR(100) UNIQUE
+);
+
+
+CREATE TABLE Riiulid (
+RiiuliKood CHAR(5) PRIMARY KEY,
+Asukoht VARCHAR(50)
+);
+
+
+CREATE TABLE Visiidid (
+ArstiID INT,
+PatsiendiID INT,
+VisiidiAeg DATETIME,
+PRIMARY KEY (ArstiID, PatsiendiID, VisiidiAeg)
+);
+
+
+CREATE TABLE ProjektiMeeskond (
+TootajaID INT, 
+ProjektiID INT, 
+PRIMARY KEY (TootajaID, ProjektiID)
+);
+
+
+CREATE TABLE Soidukid (
+VIN_kood VARCHAR(20) PRIMARY KEY, 
+Reg_number VARCHAR(10) UNIQUE      
+);
