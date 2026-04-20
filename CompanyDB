@@ -1,0 +1,33 @@
+CREATE DATABASE CompanyDB
+use CompanyDB
+
+CREATE TABLE Employees (
+    id INT PRIMARY KEY identity(1,1),
+    name VARCHAR(100),
+    salary DECIMAL(10,2)
+);
+
+CREATE TABLE AuditLog (
+    id INT PRIMARY KEY identity(1,1),
+    event_time DATETIME,
+    description_ VARCHAR(255),
+    user_ VARCHAR(100)
+);
+
+CREATE TRIGGER trg_AfterEmployeeAdd
+ON Employees
+AFTER INSERT
+AS
+BEGIN
+INSERT INTO AuditLog (event_time, description_, user_)
+SELECT 
+GETDATE(),
+'Võeti tööle uus töötaja: ' + name,
+USER_NAME()
+FROM INSERTED;
+END;
+
+CREATE USER ManagerUser FOR LOGIN ManagerUser;
+GRANT SELECT, INSERT ON Employees TO ManagerUser;
+
+SELECT * FROM AuditLog
