@@ -1,0 +1,189 @@
+-- Andmebaasi loomine
+CREATE DATABASE companydb;
+USE companydb;
+
+-- Logitabel
+CREATE TABLE AuditLog (
+id INT IDENTITY(1,1) PRIMARY KEY,
+event_time DATETIME DEFAULT GETDATE(),
+action_type VARCHAR(50),
+table_name VARCHAR(50),
+description_ VARCHAR(500),
+user_ VARCHAR(100)
+);
+
+-- Osakondade tabel
+CREATE TABLE Departments (
+id INT IDENTITY(1,1) PRIMARY KEY,
+department_name VARCHAR(100)
+);
+
+-- Töötajate tabel
+CREATE TABLE Employees (
+id INT IDENTITY(1,1) PRIMARY KEY,
+name VARCHAR(100),
+salary DECIMAL(10,2),
+department_id INT,
+CONSTRAINT FK_Employees_Departments
+FOREIGN KEY (department_id)
+REFERENCES Departments(id)
+);
+
+-- MINU TRIGGER: INSERT Employees
+CREATE TRIGGER Employees_Insert
+ON Employees
+AFTER INSERT
+AS
+BEGIN
+INSERT INTO AuditLog (
+action_type,
+table_name,
+description_,
+user_
+)
+SELECT
+'INSERT',
+'Employees',
+CONCAT('Lisati töötaja: ',i.name,', palk ',i.salary,', osakond ',d.department_name),
+SYSTEM_USER
+FROM inserted i
+JOIN Departments d
+ON i.department_id = d.id;
+END;
+
+-- MINU TRIGGER: DELETE Employees
+CREATE TRIGGER Employees_Delete
+ON Employees
+AFTER DELETE
+AS
+BEGIN
+INSERT INTO AuditLog (
+action_type,
+table_name,
+description_,
+user_
+)
+SELECT
+'DELETE',
+'Employees',
+CONCAT('Kustutati töötaja: ',dlt.name,', palk ',dlt.salary,', osakond ',dep.department_name),
+SYSTEM_USER
+FROM deleted dlt
+JOIN Departments dep
+ON dlt.department_id = dep.id;
+END;
+
+-- MINU TRIGGER: UPDATE Employees 
+CREATE TRIGGER Employees_Update
+ON Employees
+AFTER UPDATE
+AS
+BEGIN
+INSERT INTO AuditLog (
+action_type,
+table_name,
+description_,
+user_
+)
+SELECT
+'UPDATE',
+'Employees',
+CONCAT('Töötaja andmeid muudeti: Vana -> ',d.name,', palk ',d.salary,', osakond ',oldDep.department_name,' | Uus -> ',i.name,', palk ',
+i.salary,', osakond ',newDep.department_name),
+SYSTEM_USER
+FROM deleted d
+JOIN inserted i
+ON d.id = i.id
+JOIN Departments oldDep
+ON d.department_id = oldDep.id
+JOIN Departments newDep
+ON i.department_id = newDep.id;
+END;
+
+-- TRIGGER: INSERT Departments
+CREATE TRIGGER trg_Departments_Insert
+ON Departments
+AFTER INSERT
+AS
+BEGIN
+INSERT INTO AuditLog (
+action_type,
+table_name,
+description_,
+user_
+)
+SELECT
+'INSERT',
+'Departments',
+'Lisati osakond: ' + department_name,
+SYSTEM_USER
+FROM inserted;
+END;
+
+-- TRIGGER: DELETE Departments
+CREATE TRIGGER trg_Departments_Delete
+ON Departments
+AFTER DELETE
+AS
+BEGIN
+INSERT INTO AuditLog (
+action_type,
+table_name,
+description_,
+user_
+)
+SELECT
+'DELETE',
+'Departments',
+'Kustutati osakond: ' + department_name,
+SYSTEM_USER
+FROM deleted;
+END;
+
+-- TRIGGER: UPDATE Departments
+CREATE TRIGGER trg_Departments_Update
+ON Departments
+AFTER UPDATE
+AS
+BEGIN
+INSERT INTO AuditLog (
+action_type,
+table_name,
+description_,
+user_
+)
+SELECT
+'UPDATE',
+'Departments',
+'Osakond muudeti: Vana -> ' +
+d.department_name +
+' | Uus -> ' +
+i.department_name,
+SYSTEM_USER
+FROM deleted d
+JOIN inserted i
+ON d.id = i.id;
+END;
+
+-- Õigused tabelile Employees
+GRANT SELECT ON Employees TO manager;
+GRANT INSERT ON Employees TO manager;
+GRANT UPDATE ON Employees TO manager;
+GRANT DELETE ON Employees TO manager;
+
+
+-- Õigused tabelile Departments
+GRANT SELECT ON Departments TO manager;
+GRANT INSERT ON Departments TO manager;
+GRANT UPDATE ON Departments TO manager;
+GRANT DELETE ON Departments TO manager;
+
+
+-- Täielik ligipääsu keeld AuditLog tabelile
+DENY SELECT ON AuditLog TO manager;
+DENY INSERT ON AuditLog TO manager;
+DENY UPDATE ON AuditLog TO manager;
+DENY DELETE ON AuditLog TO manager;
+DENY ALTER ANY SCHEMA TO manager;
+
+select * from AuditLog;
